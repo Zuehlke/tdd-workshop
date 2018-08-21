@@ -22,14 +22,14 @@ public class Basket {
         this.itemMap = new HashMap<>();
     }
 
-    public Basket(Integer id, Map<Item, Integer> itemMap) {
+    Basket(Integer id, Map<Item, Integer> itemMap) {
         this(new CurrencyConverter());
         this.id = id;
         this.itemMap = itemMap;
     }
 
     // For tests
-    public Basket(CurrencyConverter converter) {
+    Basket(CurrencyConverter converter) {
         this.converter = converter;
     }
 
@@ -92,7 +92,11 @@ public class Basket {
         }
     }
 
-    public Integer getId() {
+    Integer getId() {
         return id;
+    }
+
+    Map<Item, Integer> getItemMap() {
+        return itemMap;
     }
 }

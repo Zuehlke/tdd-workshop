@@ -3,6 +3,7 @@ package org.zuhlke.basket;
 import org.junit.Test;
 import org.zuhlke.basket.dao.BasketDao;
 import org.zuhlke.basket.dao.BasketPojo;
+import org.zuhlke.item.Item;
 
 import java.util.HashMap;
 
@@ -42,5 +43,20 @@ public class BasketServiceTest {
 
         // Then
         assertEquals(new Integer(1), basket.getId());
+    }
+
+    @Test
+    public void persistBasket_newBasket_stored() {
+        // Given
+        Basket basket = new Basket();
+        basket.add(new Item("Wine", "6.66"));
+        BasketDao dao = mock(BasketDao.class);
+        BasketService basketService = new BasketService(dao);
+
+        // When
+        int id = basketService.persistBasket(basket);
+
+        // Then
+        assertEquals(0, id);
     }
 }

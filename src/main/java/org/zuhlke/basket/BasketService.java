@@ -23,4 +23,8 @@ public class BasketService {
     private Basket convert(BasketPojo pojo) {
         return new Basket(pojo.id, pojo.itemMap);
     }
+
+    public int persistBasket(Basket basket) {
+        return dao.persistBasket(new BasketPojo(basket.getId(), basket.getItemMap()));
+    }
 }
