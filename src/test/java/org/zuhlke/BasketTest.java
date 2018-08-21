@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+import static org.mockito.Mockito.*;
+
 public class BasketTest {
 
     private static final Currency SGD = Currency.getInstance("SGD");
@@ -183,4 +185,45 @@ public class BasketTest {
         // Then
         Assert.assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
     }
+
+    @Test
+    public void getSummary_nonSGDCurrency_conversionRateApplied_MockitoWhenThenReturn() {
+        // Given
+        Currency usd = Currency.getInstance("USD");
+        CurrencyConverter converter = mock(CurrencyConverter.class);
+        when(converter.getConversionRate(SGD, usd)).thenReturn(new BigDecimal("0.5"));
+
+        Item wine = new Item("Wine", "6.66");
+        Basket basket = new Basket(converter);
+        basket.add(wine);
+
+        // When
+        String summary = basket.getSummary(usd);
+
+        // Then
+        Assert.assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
+        // Can also assert mock was called (not needed here, as we are only interested in the output)
+        verify(converter, atLeastOnce()).getConversionRate(SGD, usd);
+    }
+
+    @Test
+    public void getSummary_nonSGDCurrency_conversionRateApplied_MockitoDoReturnWhen() {
+        // Given
+        Currency usd = Currency.getInstance("USD");
+        CurrencyConverter converter = spy(new CurrencyConverter());
+        doReturn(new BigDecimal("0.5")).when(converter).getConversionRate(SGD, usd);
+
+        Item wine = new Item("Wine", "6.66");
+        Basket basket = new Basket(converter);
+        basket.add(wine);
+
+        // When
+        String summary = basket.getSummary(usd);
+
+        // Then
+        Assert.assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
+        // Can also assert spy was called (not needed here, as we are only interested in the output)
+        verify(converter, atLeastOnce()).getConversionRate(SGD, usd);
+    }
+
 }
