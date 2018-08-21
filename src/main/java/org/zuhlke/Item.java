@@ -8,7 +8,6 @@ public class Item {
     private final BigDecimal priceBigDecimal;
 
     public Item(String itemName, String price) {
-
         this.itemName = itemName;
         this.priceBigDecimal = new BigDecimal(price);
     }
