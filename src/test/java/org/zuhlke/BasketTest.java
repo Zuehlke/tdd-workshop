@@ -94,17 +94,69 @@ public class BasketTest {
         // Then (exception)
     }
 
-    @Test(expected = Exception.class)
-    @Ignore
-    public void getList_discount_discountedPrice() {
-        Basket b = new Basket();
-        ItemRepository iR = new ItemRepository();
-        iR.add("01002", "Wine", "6.66");
+    @Test
+    public void getSummary_promoFulfilled_promoPriceShown() {
+        // Given
+        Item wine = new Item("Wine", "6.66");
+        Promotion promotion = new Promotion(wine, 2, "10.00");
+        Basket basket = new Basket();
+        // Need to add at least two wines for the promotion to trigger
+        basket.add(wine);
+        basket.add(wine);
 
-        // TODO: Refactor design here
-        b.add(iR.getItem("01002"));
-        b.add(iR.getItem("01002"));
-        b.add(iR.getItem("01002"));
-        Assert.assertEquals("3 Wine: 16.65\nTotal: 16.65", b.getSummary());
+        // When
+        String summary = basket.getSummary(promotion);
+
+        // Then
+        Assert.assertEquals("2 Wine: 10.00\nTotal: 10.00", summary);
     }
+
+    @Test
+    public void getSummary_promoNotFulfilled_ordinaryPriceShown() {
+        // Given
+        Item wine = new Item("Wine", "6.66");
+        Promotion promotion = new Promotion(wine, 2, "10.00");
+        Basket basket = new Basket();
+        basket.add(wine);
+
+        // When
+        String summary = basket.getSummary(promotion);
+
+        // Then
+        Assert.assertEquals("Wine: 6.66\nTotal: 6.66", summary);
+    }
+
+    @Test
+    public void getSummary_promoForWrongItem_ordinaryPriceShown() {
+        // Given
+        Item wine = new Item("Wine", "6.66");
+        Item roesti = new Item("Rösti", "2.33");
+        Promotion promotion = new Promotion(wine, 2, "10.00");
+        Basket basket = new Basket();
+        basket.add(roesti);
+
+        // When
+        String summary = basket.getSummary(promotion);
+
+        // Then
+        Assert.assertEquals("Rösti: 2.33\nTotal: 2.33", summary);
+    }
+
+    @Test
+    public void getSummary_promoFulfilledWithLeftoverStack_promoPriceShown() {
+        // Given
+        Item wine = new Item("Wine", "6.66");
+        Promotion promotion = new Promotion(wine, 2, "10.00");
+        Basket basket = new Basket();
+        basket.add(wine);
+        basket.add(wine);
+        basket.add(wine);
+
+        // When
+        String summary = basket.getSummary(promotion);
+
+        // Then
+        Assert.assertEquals("3 Wine: 16.66\nTotal: 16.66", summary);
+    }
+
 }
