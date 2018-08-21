@@ -1,10 +1,11 @@
 package org.zuhlke;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.Currency;
 
 public class Scanner {
     private final ItemRepository repo;
     private final Basket basket;
+    private static final Currency SGD = Currency.getInstance("SGD");
 
     public Scanner(ItemRepository repo) {
         this.repo = repo;
@@ -14,12 +15,12 @@ public class Scanner {
     public String addItem(String barCode) {
         basket.add(repo.getItem(barCode));
 
-        return basket.getSummary();
+        return basket.getSummary(SGD);
     }
 
     public String removeItem(String barCode) {
         basket.remove(repo.getItem(barCode));
 
-        return basket.getSummary();
+        return basket.getSummary(SGD);
     }
 }

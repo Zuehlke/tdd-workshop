@@ -1,13 +1,14 @@
 package org.zuhlke;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Basket {
     private Map<Item, Integer> itemMap = new HashMap<>();
 
-    public String getSummary(Promotion... promotions) {
+    public String getSummary(Currency targetCurrency, Promotion... promotions) {
         StringBuilder sb = new StringBuilder();
         BigDecimal sum = new BigDecimal("0.00");
 
@@ -38,14 +39,16 @@ public class Basket {
         }
 
         sb.append("Total: ")
-                .append(sum.toPlainString());
+                .append(sum.toPlainString())
+                .append(" ")
+                .append(targetCurrency.getSymbol());
         return sb.toString();
     }
 
     public void add(Item item) {
         Integer prevValue = itemMap.putIfAbsent(item, 1);
         if (prevValue != null) {
-            itemMap.put(item, itemMap.get(item)+1);
+            itemMap.put(item, itemMap.get(item) + 1);
         }
     }
 
@@ -54,7 +57,7 @@ public class Basket {
         if (currentCount == 1) {
             itemMap.remove(item);
         } else {
-            itemMap.put(item, currentCount-1);
+            itemMap.put(item, currentCount - 1);
         }
     }
 }

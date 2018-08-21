@@ -1,10 +1,13 @@
 package org.zuhlke;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Currency;
+
 public class BasketTest {
+
+    private static final Currency SGD = Currency.getInstance("SGD");
 
     @Test
     public void getSummary_emptyBasket_0Total() {
@@ -12,10 +15,10 @@ public class BasketTest {
         Basket b = new Basket();
 
         // When
-        String summary = b.getSummary();
+        String summary = b.getSummary(SGD);
 
         // Then
-        Assert.assertEquals("Total: 0.00", summary);
+        Assert.assertEquals("Total: 0.00 " + SGD.getSymbol(), summary);
     }
 
     @Test
@@ -27,7 +30,7 @@ public class BasketTest {
         b.add(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66", b.getSummary());
+        Assert.assertEquals("Wine: 6.66\nTotal: 6.66 SGD", b.getSummary(SGD));
     }
 
     @Test
@@ -40,7 +43,7 @@ public class BasketTest {
         b.add(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("Rösti: 2.33\nWine: 6.66\nTotal: 8.99", b.getSummary());
+        Assert.assertEquals("Rösti: 2.33\nWine: 6.66\nTotal: 8.99 SGD", b.getSummary(SGD));
     }
 
     @Test
@@ -53,7 +56,7 @@ public class BasketTest {
         b.add(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("2 Wine: 13.32\nTotal: 13.32", b.getSummary());
+        Assert.assertEquals("2 Wine: 13.32\nTotal: 13.32 SGD", b.getSummary(SGD));
     }
 
     @Test
@@ -66,21 +69,22 @@ public class BasketTest {
         b.remove(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("Total: 0.00", b.getSummary());
+        Assert.assertEquals("Total: 0.00 SGD", b.getSummary(SGD));
     }
 
     @Test
     public void remove_itemTwiceInBasketRemoved_itemNoLongerOnSummary() {
         // Given
         Basket b = new Basket();
-        b.add(new Item("Wine", "6.66"));
-        b.add(new Item("Wine", "6.66"));
+        Item wine = new Item("Wine", "6.66");
+        b.add(wine);
+        b.add(wine);
 
         // When
-        b.remove(new Item("Wine", "6.66"));
+        b.remove(wine);
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66", b.getSummary());
+        Assert.assertEquals("Wine: 6.66\nTotal: 6.66 SGD", b.getSummary(SGD));
     }
 
     @Test(expected = Exception.class)
@@ -105,10 +109,10 @@ public class BasketTest {
         basket.add(wine);
 
         // When
-        String summary = basket.getSummary(promotion);
+        String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("2 Wine: 10.00\nTotal: 10.00", summary);
+        Assert.assertEquals("2 Wine: 10.00\nTotal: 10.00 SGD", summary);
     }
 
     @Test
@@ -120,10 +124,10 @@ public class BasketTest {
         basket.add(wine);
 
         // When
-        String summary = basket.getSummary(promotion);
+        String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66", summary);
+        Assert.assertEquals("Wine: 6.66\nTotal: 6.66 SGD", summary);
     }
 
     @Test
@@ -136,10 +140,10 @@ public class BasketTest {
         basket.add(roesti);
 
         // When
-        String summary = basket.getSummary(promotion);
+        String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("Rösti: 2.33\nTotal: 2.33", summary);
+        Assert.assertEquals("Rösti: 2.33\nTotal: 2.33 SGD", summary);
     }
 
     @Test
@@ -153,10 +157,9 @@ public class BasketTest {
         basket.add(wine);
 
         // When
-        String summary = basket.getSummary(promotion);
+        String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("3 Wine: 16.66\nTotal: 16.66", summary);
+        Assert.assertEquals("3 Wine: 16.66\nTotal: 16.66 SGD", summary);
     }
-
 }
