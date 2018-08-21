@@ -13,10 +13,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.zuhlke.basket.Basket.SGD;
 
 public class BasketTest {
-
-    private static final Currency SGD = Currency.getInstance("SGD");
 
     @Test
     public void getSummary_emptyBasket_0Total() {
