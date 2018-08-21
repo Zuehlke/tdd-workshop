@@ -3,6 +3,7 @@ package org.zuhlke;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Currency;
 
 public class BasketTest {
@@ -161,5 +162,25 @@ public class BasketTest {
 
         // Then
         Assert.assertEquals("3 Wine: 16.66\nTotal: 16.66", summary);
+    }
+
+    @Test
+    public void getSummary_nonSGDCurrency_conversionRateApplied() {
+        // Given
+        CurrencyConverter converter = new CurrencyConverter() {
+            @Override
+            public BigDecimal getConversionRate(Currency from, Currency to) {
+                return new BigDecimal("0.5");
+            }
+        };
+        Item wine = new Item("Wine", "6.66");
+        Basket basket = new Basket(converter);
+        basket.add(wine);
+
+        // When
+        String summary = basket.getSummary(Currency.getInstance("USD"));
+
+        // Then
+        Assert.assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
     }
 }

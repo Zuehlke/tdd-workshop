@@ -1,6 +1,7 @@
 package org.zuhlke;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,15 @@ import java.util.Map;
 public class Basket {
     public static final Currency SGD = Currency.getInstance("SGD");
     private Map<Item, Integer> itemMap = new HashMap<>();
+    private CurrencyConverter converter;
+
+    public Basket() {
+        this(new CurrencyConverter());
+    }
+
+    public Basket(CurrencyConverter converter) {
+        this.converter = converter;
+    }
 
     public String getSummary(Currency targetCurrency, Promotion... promotions) {
         StringBuilder sb = new StringBuilder();
@@ -41,14 +51,14 @@ public class Basket {
 
         sb.append("Total: ")
                 .append(sum.toPlainString());
-        /*
+
         if (!targetCurrency.equals(SGD)) {
-            sb.append("Converted to ")
+            sb.append("\nConverted to ")
                     .append(targetCurrency.getSymbol())
-                    .append(":")
-                    .append(sum.multiply(new CurrencyConverter().getConversionRate(SGD, targetCurrency)));
+                    .append(": ")
+                    .append(sum.multiply(converter.getConversionRate(SGD, targetCurrency)).setScale(2, RoundingMode.DOWN));
         }
-        */
+
         return sb.toString();
     }
 
