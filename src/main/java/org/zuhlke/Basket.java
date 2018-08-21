@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Basket {
+    public static final Currency SGD = Currency.getInstance("SGD");
     private Map<Item, Integer> itemMap = new HashMap<>();
 
     public String getSummary(Currency targetCurrency, Promotion... promotions) {
@@ -39,9 +40,13 @@ public class Basket {
         }
 
         sb.append("Total: ")
-                .append(sum.toPlainString())
-                .append(" ")
-                .append(targetCurrency.getSymbol());
+                .append(sum.toPlainString());
+        if (!targetCurrency.equals(SGD)) {
+            sb.append("Converted to ")
+                    .append(targetCurrency.getSymbol())
+                    .append(":")
+                    .append(sum.multiply(new CurrencyConverter().getConversionRate(SGD, targetCurrency)));
+        }
         return sb.toString();
     }
 
