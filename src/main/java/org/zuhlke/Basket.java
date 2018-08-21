@@ -41,12 +41,14 @@ public class Basket {
 
         sb.append("Total: ")
                 .append(sum.toPlainString());
+        /*
         if (!targetCurrency.equals(SGD)) {
             sb.append("Converted to ")
                     .append(targetCurrency.getSymbol())
                     .append(":")
                     .append(sum.multiply(new CurrencyConverter().getConversionRate(SGD, targetCurrency)));
         }
+        */
         return sb.toString();
     }
 
