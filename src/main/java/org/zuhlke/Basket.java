@@ -10,13 +10,16 @@ public class Basket {
     public String getSummary() {
         StringBuilder sb = new StringBuilder();
         BigDecimal sum = new BigDecimal("0.00");
+
         for (Map.Entry<Item, Integer> entry : itemMap.entrySet()) {
-            BigDecimal itemStackPrice = entry.getKey().getPriceBigDecimal().multiply(new BigDecimal(entry.getValue()));
+            Item item = entry.getKey();
+            Integer numberOfItems = entry.getValue();
+            BigDecimal itemStackPrice = item.getPriceBigDecimal().multiply(new BigDecimal(numberOfItems));
             sum = sum.add(itemStackPrice);
-            if (entry.getValue() > 1) {
-                sb.append(entry.getValue()).append(" ");
+            if (numberOfItems > 1) {
+                sb.append(numberOfItems).append(" ");
             }
-            sb.append(entry.getKey().getName())
+            sb.append(item.getName())
                     .append(": ")
                     .append(itemStackPrice.toPlainString())
                     .append("\n");
