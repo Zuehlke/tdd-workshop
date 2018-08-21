@@ -1,4 +1,8 @@
-package org.zuhlke;
+package org.zuhlke.basket;
+
+import org.zuhlke.converter.CurrencyConverter;
+import org.zuhlke.item.Item;
+import org.zuhlke.promotion.Promotion;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

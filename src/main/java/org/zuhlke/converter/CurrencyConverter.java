@@ -1,4 +1,4 @@
-package org.zuhlke;
+package org.zuhlke.converter;
 
 import java.math.BigDecimal;
 import java.util.Currency;

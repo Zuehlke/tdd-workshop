@@ -1,4 +1,4 @@
-package org.zuhlke;
+package org.zuhlke.item;
 
 import java.util.HashMap;
 import java.util.Map;

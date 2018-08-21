@@ -1,7 +1,8 @@
-package org.zuhlke;
+package org.zuhlke.scanner;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.zuhlke.item.ItemRepository;
 
 public class ScannerTest {
 

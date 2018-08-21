@@ -1,4 +1,6 @@
-package org.zuhlke;
+package org.zuhlke.promotion;
+
+import org.zuhlke.item.Item;
 
 import java.math.BigDecimal;
 

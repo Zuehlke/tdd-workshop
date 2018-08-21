@@ -1,4 +1,7 @@
-package org.zuhlke;
+package org.zuhlke.scanner;
+
+import org.zuhlke.basket.Basket;
+import org.zuhlke.item.ItemRepository;
 
 import java.util.Currency;
 

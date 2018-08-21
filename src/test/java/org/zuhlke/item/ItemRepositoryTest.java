@@ -1,4 +1,4 @@
-package org.zuhlke;
+package org.zuhlke.item;
 
 import org.junit.Assert;
 import org.junit.Test;
