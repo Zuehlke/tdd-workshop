@@ -1,11 +1,14 @@
 package org.zuhlke;
 
-import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Currency;
+import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class BasketTest {
@@ -21,7 +24,7 @@ public class BasketTest {
         String summary = b.getSummary(SGD);
 
         // Then
-        Assert.assertEquals("Total: 0.00", summary);
+        assertEquals("Total: 0.00", summary);
     }
 
     @Test
@@ -33,7 +36,7 @@ public class BasketTest {
         b.add(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66", b.getSummary(SGD));
+        assertEquals("Wine: 6.66\nTotal: 6.66", b.getSummary(SGD));
     }
 
     @Test
@@ -46,7 +49,7 @@ public class BasketTest {
         b.add(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("Rösti: 2.33\nWine: 6.66\nTotal: 8.99", b.getSummary(SGD));
+        assertEquals("Rösti: 2.33\nWine: 6.66\nTotal: 8.99", b.getSummary(SGD));
     }
 
     @Test
@@ -59,7 +62,7 @@ public class BasketTest {
         b.add(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("2 Wine: 13.32\nTotal: 13.32", b.getSummary(SGD));
+        assertEquals("2 Wine: 13.32\nTotal: 13.32", b.getSummary(SGD));
     }
 
     @Test
@@ -72,7 +75,7 @@ public class BasketTest {
         b.remove(new Item("Wine", "6.66"));
 
         // Then
-        Assert.assertEquals("Total: 0.00", b.getSummary(SGD));
+        assertEquals("Total: 0.00", b.getSummary(SGD));
     }
 
     @Test
@@ -87,7 +90,7 @@ public class BasketTest {
         b.remove(wine);
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66", b.getSummary(SGD));
+        assertEquals("Wine: 6.66\nTotal: 6.66", b.getSummary(SGD));
     }
 
     @Test(expected = Exception.class)
@@ -115,7 +118,7 @@ public class BasketTest {
         String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("2 Wine: 10.00\nTotal: 10.00", summary);
+        assertEquals("2 Wine: 10.00\nTotal: 10.00", summary);
     }
 
     @Test
@@ -130,7 +133,7 @@ public class BasketTest {
         String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66", summary);
+        assertEquals("Wine: 6.66\nTotal: 6.66", summary);
     }
 
     @Test
@@ -146,7 +149,7 @@ public class BasketTest {
         String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("Rösti: 2.33\nTotal: 2.33", summary);
+        assertEquals("Rösti: 2.33\nTotal: 2.33", summary);
     }
 
     @Test
@@ -163,7 +166,7 @@ public class BasketTest {
         String summary = basket.getSummary(SGD, promotion);
 
         // Then
-        Assert.assertEquals("3 Wine: 16.66\nTotal: 16.66", summary);
+        assertEquals("3 Wine: 16.66\nTotal: 16.66", summary);
     }
 
     @Test
@@ -183,7 +186,7 @@ public class BasketTest {
         String summary = basket.getSummary(Currency.getInstance("USD"));
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
+        assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
     }
 
     @Test
@@ -201,7 +204,7 @@ public class BasketTest {
         String summary = basket.getSummary(usd);
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
+        assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
         // Can also assert mock was called (not needed here, as we are only interested in the output)
         verify(converter, atLeastOnce()).getConversionRate(SGD, usd);
     }
@@ -221,9 +224,32 @@ public class BasketTest {
         String summary = basket.getSummary(usd);
 
         // Then
-        Assert.assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
+        assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
         // Can also assert spy was called (not needed here, as we are only interested in the output)
         verify(converter, atLeastOnce()).getConversionRate(SGD, usd);
+    }
+
+    @Test
+    public void getSummary_nonSGDCurrency_conversionRateApplied_MockitoArgumentCaptors() {
+        // Given
+        Currency usd = Currency.getInstance("USD");
+        CurrencyConverter converter = mock(CurrencyConverter.class);
+        when(converter.getConversionRate(SGD, usd)).thenReturn(new BigDecimal("0.5"));
+
+        Item wine = new Item("Wine", "6.66");
+        Basket basket = new Basket(converter);
+        basket.add(wine);
+
+        // When
+        String summary = basket.getSummary(usd);
+
+        // Then
+        assertEquals("Wine: 6.66\nTotal: 6.66\nConverted to $: 3.33", summary);
+        // Can also assert mock was called with correct arguments (not needed here, as we are only interested in the output)
+        ArgumentCaptor<Currency> captor = ArgumentCaptor.forClass(Currency.class);
+        List<Currency> expected = Arrays.asList(SGD, usd);
+        verify(converter).getConversionRate(captor.capture(), captor.capture());
+        assertEquals(expected, captor.getAllValues());
     }
 
 }
