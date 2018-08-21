@@ -12,13 +12,23 @@ import java.util.Map;
 
 public class Basket {
     public static final Currency SGD = Currency.getInstance("SGD");
+    private Integer id;
     private Map<Item, Integer> itemMap = new HashMap<>();
     private CurrencyConverter converter;
 
     public Basket() {
         this(new CurrencyConverter());
+        this.id = null;
+        this.itemMap = new HashMap<>();
     }
 
+    public Basket(Integer id, Map<Item, Integer> itemMap) {
+        this(new CurrencyConverter());
+        this.id = id;
+        this.itemMap = itemMap;
+    }
+
+    // For tests
     public Basket(CurrencyConverter converter) {
         this.converter = converter;
     }
@@ -80,5 +90,9 @@ public class Basket {
         } else {
             itemMap.put(item, currentCount - 1);
         }
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

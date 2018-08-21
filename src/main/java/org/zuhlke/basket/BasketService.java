@@ -5,14 +5,22 @@ import org.zuhlke.basket.dao.BasketPojo;
 
 public class BasketService {
 
+    private BasketDao dao;
+
+    public BasketService(BasketDao dao) {
+        this.dao = dao;
+    }
+
     public Basket getBasket(int id) {
-        // TODO implement
-        BasketPojo pojo = new BasketDao().getBasket(id);
+        BasketPojo pojo = dao.getBasket(id);
+        if (pojo == null) {
+            // Not found, return empty basket
+            return new Basket();
+        }
         return convert(pojo);
     }
 
     private Basket convert(BasketPojo pojo) {
-        // TODO implement
-        return null;
+        return new Basket(pojo.id, pojo.itemMap);
     }
 }
