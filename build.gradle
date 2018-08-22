@@ -29,3 +29,7 @@ dependencies {
     testCompile 'org.glassfish.jersey.core:jersey-client:2.27'
     compile 'org.glassfish.jersey.media:jersey-media-moxy:2.27'
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

@@ -28,3 +28,9 @@ hs_err_pid*
 
 # Unit Test DDL
 unitTest*.ddl
+
+# Eclipse
+.settings/
+bin/
+.classpath
+.project
