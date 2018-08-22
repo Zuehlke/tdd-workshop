@@ -16,7 +16,7 @@ public class GameTest {
     @Test
     public void test() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), new ArrayList());
+        Game aGame = new Game(new PrintStream(out), new ArrayList(), new boolean[6]);
         aGame.add("Chet");
         boolean actual = aGame.wrongAnswer();
         assertTrue(actual);
@@ -31,7 +31,7 @@ public class GameTest {
     @Test
     public void main() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), new ArrayList());
+        Game aGame = new Game(new PrintStream(out), new ArrayList(), new boolean[6]);
 
         aGame.add("Chet");
         aGame.add("Pat");
@@ -171,7 +171,7 @@ public class GameTest {
     @Test
     public void main2() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), new ArrayList());
+        Game aGame = new Game(new PrintStream(out), new ArrayList(), new boolean[6]);
 
         aGame.add("Chet");
         aGame.add("Pat");
@@ -277,7 +277,7 @@ public class GameTest {
     @Test
     public void roll3_bradOnPlace0_bradMovedAndQuestionAsked() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"));
+        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"), new boolean[6]);
 
         Question forBrad = aGame.roll(3);
 
@@ -287,5 +287,31 @@ public class GameTest {
         assertEquals(3, aGame.places[0]);
     }
 
+    @Test
+    public void roll2_bradInPenaltyBoxEvenRoll_bradNotMovedAndNoQuestionAsked() {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"), new boolean[]{true, false});
+
+        Question forBrad = aGame.roll(2);
+
+        // In penalty box and even roll: Question was not asked
+        assertNull(forBrad);
+        // Brad has not moved
+        assertEquals(0, aGame.places[0]);
+    }
+
+
+    @Test
+    public void roll3_bradInPenaltyBoxUnevenRoll_bradMovedAndQuestionAsked() {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"), new boolean[]{true, false});
+
+        Question forBrad = aGame.roll(3);
+
+        // In penalty box but uneven roll: Question was asked
+        assertEquals("Rock Question 0", forBrad.toString());
+        // Brad has moved
+        assertEquals(3, aGame.places[0]);
+    }
 
 }
