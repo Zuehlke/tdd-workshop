@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
-    ArrayList players = new ArrayList();
+    List players = new ArrayList();
     int[] places = new int[6];
     int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
@@ -22,11 +22,12 @@ public class Game {
     private PrintStream out;
 
     public Game() {
-        this(System.out);
+        this(System.out, new ArrayList());
     }
 
-    Game(PrintStream printStream) {
-        out = printStream;
+    Game(PrintStream printStream, List players) {
+        this.out = printStream;
+        this.players = players;
         for (int i = 0; i < 50; i++) {
             popQuestions.add(new Question("Pop Question " + i));
             scienceQuestions.add(new Question("Science Question " + i));

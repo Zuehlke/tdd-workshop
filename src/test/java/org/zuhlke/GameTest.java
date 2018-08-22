@@ -4,18 +4,19 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GameTest {
 
     @Test
     public void test() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out));
+        Game aGame = new Game(new PrintStream(out), new ArrayList());
         aGame.add("Chet");
         boolean actual = aGame.wrongAnswer();
         assertTrue(actual);
@@ -30,7 +31,7 @@ public class GameTest {
     @Test
     public void main() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out));
+        Game aGame = new Game(new PrintStream(out), new ArrayList());
 
         aGame.add("Chet");
         aGame.add("Pat");
@@ -170,7 +171,7 @@ public class GameTest {
     @Test
     public void main2() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out));
+        Game aGame = new Game(new PrintStream(out), new ArrayList());
 
         aGame.add("Chet");
         aGame.add("Pat");
@@ -272,5 +273,19 @@ public class GameTest {
                 "Answer was correct!!!!\n" +
                 "Pat now has 6 Gold Coins."));
     }
+
+    @Test
+    public void roll3_bradOnPlace0_bradMovedAndQuestionAsked() {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"));
+
+        Question forBrad = aGame.roll(3);
+
+        // Not in penalty box: Question was asked
+        assertEquals("Rock Question 0", forBrad.toString());
+        // Brad has moved
+        assertEquals(3, aGame.places[0]);
+    }
+
 
 }
