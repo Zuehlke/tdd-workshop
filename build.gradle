@@ -19,4 +19,6 @@ dependencies {
     compile 'javax.transaction:jta:1.1'
 
     compile 'com.h2database:h2:1.4.197'
+
+    compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1'
 }
