@@ -3,6 +3,7 @@ package org.zuhlke;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Game {
     ArrayList players = new ArrayList();
@@ -10,10 +11,10 @@ public class Game {
     int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
 
-    LinkedList popQuestions = new LinkedList();
-    LinkedList scienceQuestions = new LinkedList();
-    LinkedList sportsQuestions = new LinkedList();
-    LinkedList rockQuestions = new LinkedList();
+    List<Question> popQuestions = new LinkedList<>();
+    List<Question> scienceQuestions = new LinkedList<>();
+    List<Question> sportsQuestions = new LinkedList<>();
+    List<Question> rockQuestions = new LinkedList<>();
 
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
@@ -27,10 +28,10 @@ public class Game {
     Game(PrintStream printStream) {
         out = printStream;
         for (int i = 0; i < 50; i++) {
-            popQuestions.addLast("Pop Question " + i);
-            scienceQuestions.addLast("Science Question " + i);
-            sportsQuestions.addLast("Sports Question " + i);
-            rockQuestions.addLast("Rock Question " + i);
+            popQuestions.add(new Question("Pop Question " + i));
+            scienceQuestions.add(new Question("Science Question " + i));
+            sportsQuestions.add(new Question("Sports Question " + i));
+            rockQuestions.add(new Question("Rock Question " + i));
         }
     }
 
@@ -49,7 +50,7 @@ public class Game {
         return players.size();
     }
 
-    public void roll(int roll) {
+    public Question roll(int roll) {
         out.println(players.get(currentPlayer) + " is the current player");
         out.println("They have rolled a " + roll);
 
@@ -58,17 +59,19 @@ public class Game {
                 isGettingOutOfPenaltyBox = true;
 
                 out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-                advancePlayerAndAskQuestion(roll);
+                return advancePlayerAndAskQuestion(roll);
             } else {
                 out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
+                // You don't get a question, return null
+                return null;
             }
         } else {
-            advancePlayerAndAskQuestion(roll);
+            return advancePlayerAndAskQuestion(roll);
         }
     }
 
-    private void advancePlayerAndAskQuestion(int roll) {
+    private Question advancePlayerAndAskQuestion(int roll) {
         places[currentPlayer] = places[currentPlayer] + roll;
         if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
@@ -76,18 +79,25 @@ public class Game {
                 + "'s new location is "
                 + places[currentPlayer]);
         out.println("The category is " + currentCategory());
-        askQuestion();
+        return askQuestion();
     }
 
-    private void askQuestion() {
-        if (currentCategory() == "Pop")
-            out.println(popQuestions.removeFirst());
-        if (currentCategory() == "Science")
-            out.println(scienceQuestions.removeFirst());
-        if (currentCategory() == "Sports")
-            out.println(sportsQuestions.removeFirst());
-        if (currentCategory() == "Rock")
-            out.println(rockQuestions.removeFirst());
+    private Question askQuestion() {
+        Question question = null;
+        if (currentCategory() == "Pop") {
+            question = popQuestions.remove(0);
+        }
+        if (currentCategory() == "Science") {
+            question = scienceQuestions.remove(0);
+        }
+        if (currentCategory() == "Sports") {
+            question = sportsQuestions.remove(0);
+        }
+        if (currentCategory() == "Rock") {
+            question = rockQuestions.remove(0);
+        }
+        out.println(question);
+        return question;
     }
 
 
