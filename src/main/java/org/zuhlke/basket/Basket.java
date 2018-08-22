@@ -92,11 +92,16 @@ public class Basket {
         }
     }
 
-    Integer getId() {
+    Map<Item, Integer> getItemMap() {
+        return itemMap;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    Map<Item, Integer> getItemMap() {
-        return itemMap;
+    // Need setter for JSON serialization
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

@@ -21,4 +21,13 @@ dependencies {
     compile 'com.h2database:h2:1.4.197'
 
     compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1'
+
+    runtimeOnly 'org.glassfish.jersey.core:jersey-common:2.27'
+    runtimeOnly 'org.glassfish.jersey.inject:jersey-hk2:2.27'
+    runtimeOnly 'org.glassfish.jersey.containers:jersey-container-jdk-http:2.27'
+
+    runtimeOnly 'org.glassfish.jersey.media:jersey-media-json-jackson:2.27'
+
+    testCompile 'org.glassfish.jersey.core:jersey-client:2.27'
+    testCompile 'org.glassfish.jersey.media:jersey-media-moxy:2.27'
 }

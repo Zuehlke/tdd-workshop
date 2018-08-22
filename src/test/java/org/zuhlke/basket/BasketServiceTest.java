@@ -7,6 +7,7 @@ import org.zuhlke.basket.dao.BasketPojo;
 import org.zuhlke.item.Item;
 import org.zuhlke.item.ItemRepository;
 
+import javax.persistence.EntityManager;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +22,7 @@ public class BasketServiceTest {
     public void getBasket_notFound_emptyBasketWithoutId() {
         // Given
         BasketDao dao = mock(BasketDao.class);
-        BasketService basketService = new BasketService(dao, new ItemRepository());
+        BasketService basketService = new BasketService(null, dao, new ItemRepository());
 
         // When
         Basket basket = basketService.getBasket(1);
@@ -38,7 +39,7 @@ public class BasketServiceTest {
         int id = 1;
         BasketPojo pojo = new BasketPojo(id, new HashMap<>());
         when(dao.getBasket(id)).thenReturn(pojo);
-        BasketService basketService = new BasketService(dao, new ItemRepository());
+        BasketService basketService = new BasketService(null, dao, new ItemRepository());
 
         // When
         Basket basket = basketService.getBasket(id);
@@ -60,7 +61,7 @@ public class BasketServiceTest {
         when(dao.getBasket(id)).thenReturn(pojo);
         ItemRepository itemRepository = new ItemRepository();
         itemRepository.add(barcode, "Wine", "6.66");
-        BasketService basketService = new BasketService(dao, itemRepository);
+        BasketService basketService = new BasketService(null, dao, itemRepository);
 
         // When
         Basket basket = basketService.getBasket(id);
@@ -81,7 +82,7 @@ public class BasketServiceTest {
             argument.id = assignedId;
             return null;
         }).when(dao).persistBasket(any());
-        BasketService basketService = new BasketService(dao, new ItemRepository());
+        BasketService basketService = new BasketService(mock(EntityManager.class, RETURNS_DEEP_STUBS), dao, new ItemRepository());
 
         // When
         int id = basketService.persistBasket(basket);
