@@ -25,3 +25,12 @@ hs_err_pid*
 # IntelliJ
 .idea/
 *.iml
+
+# Unit Test DDL
+unitTest*.ddl
+
+# Eclipse
+.settings/
+bin/
+.classpath
+.project
