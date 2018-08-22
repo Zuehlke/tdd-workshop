@@ -6,10 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
-    List players;
+    List<Player> players = new ArrayList<>();
     int[] places = new int[6];
     int[] purses = new int[6];
-    boolean[] inPenaltyBox;
 
     List<Question> popQuestions = new LinkedList<>();
     List<Question> scienceQuestions = new LinkedList<>();
@@ -22,13 +21,12 @@ public class Game {
     private PrintStream out;
 
     public Game() {
-        this(System.out, new ArrayList(), new boolean[6]);
+        this(System.out, new ArrayList<>());
     }
 
-    Game(PrintStream printStream, List players, boolean[] inPenaltyBox) {
+    Game(PrintStream printStream, List<Player> players) {
         this.out = printStream;
         this.players = players;
-        this.inPenaltyBox = inPenaltyBox;
         for (int i = 0; i < 50; i++) {
             popQuestions.add(new Question("Pop Question " + i));
             scienceQuestions.add(new Question("Science Question " + i));
@@ -38,10 +36,9 @@ public class Game {
     }
 
     public boolean add(String playerName) {
-        players.add(playerName);
+        players.add(new Player(playerName, false, 0));
         places[howManyPlayers()] = 0;
         purses[howManyPlayers()] = 0;
-        inPenaltyBox[howManyPlayers()] = false;
 
         out.println(playerName + " was added");
         out.println("They are player number " + players.size());
@@ -56,7 +53,7 @@ public class Game {
         out.println(players.get(currentPlayer) + " is the current player");
         out.println("They have rolled a " + roll);
 
-        if (inPenaltyBox[currentPlayer]) {
+        if (players.get(currentPlayer).isInPenaltyBox()) {
             if (roll % 2 != 0) {
                 isGettingOutOfPenaltyBox = true;
 
@@ -117,7 +114,7 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (inPenaltyBox[currentPlayer] && !isGettingOutOfPenaltyBox) {
+        if (players.get(currentPlayer).isInPenaltyBox() && !isGettingOutOfPenaltyBox) {
             nextPlayer();
             return true;
         } else {
@@ -147,7 +144,7 @@ public class Game {
     public boolean wrongAnswer() {
         out.println("Question was incorrectly answered");
         out.println(players.get(currentPlayer) + " was sent to the penalty box");
-        inPenaltyBox[currentPlayer] = true;
+        players.get(currentPlayer).setInPenaltyBox(true);
 
         nextPlayer();
         return true;

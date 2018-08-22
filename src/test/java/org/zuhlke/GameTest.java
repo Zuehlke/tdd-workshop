@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
@@ -16,7 +17,7 @@ public class GameTest {
     @Test
     public void test() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), new ArrayList(), new boolean[6]);
+        Game aGame = new Game(new PrintStream(out), new ArrayList<>());
         aGame.add("Chet");
         boolean actual = aGame.wrongAnswer();
         assertTrue(actual);
@@ -31,7 +32,7 @@ public class GameTest {
     @Test
     public void main() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), new ArrayList(), new boolean[6]);
+        Game aGame = new Game(new PrintStream(out), new ArrayList<>());
 
         aGame.add("Chet");
         aGame.add("Pat");
@@ -171,7 +172,7 @@ public class GameTest {
     @Test
     public void main2() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), new ArrayList(), new boolean[6]);
+        Game aGame = new Game(new PrintStream(out), new ArrayList<>());
 
         aGame.add("Chet");
         aGame.add("Pat");
@@ -277,7 +278,8 @@ public class GameTest {
     @Test
     public void roll3_bradOnPlace0_bradMovedAndQuestionAsked() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"), new boolean[6]);
+        List<Player> players = Arrays.asList(new Player("Brad", false, 0), new Player("Pit", false, 0));
+        Game aGame = new Game(new PrintStream(out), players);
 
         Question forBrad = aGame.roll(3);
 
@@ -290,7 +292,8 @@ public class GameTest {
     @Test
     public void roll2_bradInPenaltyBoxEvenRoll_bradNotMovedAndNoQuestionAsked() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"), new boolean[]{true, false});
+        List<Player> players = Arrays.asList(new Player("Brad", true, 0), new Player("Pit", false, 0));
+        Game aGame = new Game(new PrintStream(out), players);
 
         Question forBrad = aGame.roll(2);
 
@@ -300,11 +303,11 @@ public class GameTest {
         assertEquals(0, aGame.places[0]);
     }
 
-
     @Test
     public void roll3_bradInPenaltyBoxUnevenRoll_bradMovedAndQuestionAsked() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Game aGame = new Game(new PrintStream(out), Arrays.asList("Brad", "Pit"), new boolean[]{true, false});
+        List<Player> players = Arrays.asList(new Player("Brad", true, 0), new Player("Pit", false, 0));
+        Game aGame = new Game(new PrintStream(out), players);
 
         Question forBrad = aGame.roll(3);
 
