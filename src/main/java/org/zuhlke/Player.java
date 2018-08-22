@@ -27,12 +27,12 @@ public class Player {
         return purse;
     }
 
-    public void setPurse(int purse) {
-        this.purse = purse;
+    public void increasePurse() {
+        this.purse++;
     }
 
     @Override
     public String toString() {
-        return name;
+        return getName();
     }
 }
