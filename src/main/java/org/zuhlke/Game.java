@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Game {
     List<Player> players;
-    int[] places = new int[6];
 
     List<Question> popQuestions = new LinkedList<>();
     List<Question> scienceQuestions = new LinkedList<>();
@@ -35,16 +34,11 @@ public class Game {
     }
 
     public boolean add(String playerName) {
-        players.add(new Player(playerName, false, 0));
-        places[howManyPlayers()] = 0;
+        players.add(new Player(playerName, 0, false, 0));
 
         out.println(playerName + " was added");
         out.println("They are player number " + players.size());
         return true;
-    }
-
-    public int howManyPlayers() {
-        return players.size();
     }
 
     public Question roll(int roll) {
@@ -69,12 +63,11 @@ public class Game {
     }
 
     private Question advancePlayerAndAskQuestion(int roll) {
-        places[currentPlayer] = places[currentPlayer] + roll;
-        if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
+        players.get(currentPlayer).advance(roll);
 
         out.println(players.get(currentPlayer)
                 + "'s new location is "
-                + places[currentPlayer]);
+                + players.get(currentPlayer).getPlace());
         out.println("The category is " + currentCategory());
         return askQuestion();
     }
@@ -99,15 +92,16 @@ public class Game {
 
 
     private String currentCategory() {
-        if (places[currentPlayer] == 0) return "Pop";
-        if (places[currentPlayer] == 4) return "Pop";
-        if (places[currentPlayer] == 8) return "Pop";
-        if (places[currentPlayer] == 1) return "Science";
-        if (places[currentPlayer] == 5) return "Science";
-        if (places[currentPlayer] == 9) return "Science";
-        if (places[currentPlayer] == 2) return "Sports";
-        if (places[currentPlayer] == 6) return "Sports";
-        if (places[currentPlayer] == 10) return "Sports";
+        int place = players.get(currentPlayer).getPlace();
+        if (place == 0) return "Pop";
+        if (place == 4) return "Pop";
+        if (place == 8) return "Pop";
+        if (place == 1) return "Science";
+        if (place == 5) return "Science";
+        if (place == 9) return "Science";
+        if (place == 2) return "Sports";
+        if (place == 6) return "Sports";
+        if (place == 10) return "Sports";
         return "Rock";
     }
 

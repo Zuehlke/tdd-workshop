@@ -2,11 +2,13 @@ package org.zuhlke;
 
 public class Player {
     private final String name;
+    private int place;
     private boolean isInPenaltyBox;
     private int purse;
 
-    public Player(String name, boolean isInPenaltyBox, int purse) {
+    public Player(String name, int place, boolean isInPenaltyBox, int purse) {
         this.name = name;
+        this.place = place;
         this.isInPenaltyBox = isInPenaltyBox;
         this.purse = purse;
     }
@@ -34,5 +36,14 @@ public class Player {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public void advance(int roll) {
+        place += roll;
+        place %= 12;
+    }
+
+    public int getPlace() {
+        return place;
     }
 }
