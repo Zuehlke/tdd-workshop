@@ -34,3 +34,4 @@ unitTest*.ddl
 bin/
 .classpath
 .project
+out/
