@@ -27,5 +27,5 @@ dependencies {
     runtimeOnly 'org.glassfish.jersey.containers:jersey-container-jdk-http:2.27'
 
     testCompile 'org.glassfish.jersey.core:jersey-client:2.27'
-    testCompile 'org.glassfish.jersey.media:jersey-media-moxy:2.27'
+    compile 'org.glassfish.jersey.media:jersey-media-moxy:2.27'
 }

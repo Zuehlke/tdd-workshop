@@ -23,7 +23,7 @@ public class BasketService {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("example");
         em = emf.createEntityManager();
         this.dao = new BasketDao(em);
-        this.itemRepository = new ItemRepository();
+        this.itemRepository = ItemRepository.getProductiveInstance();
     }
 
     // Test only
@@ -60,8 +60,11 @@ public class BasketService {
     public int persistBasket(Basket basket) {
         em.getTransaction().begin();
 
-        // TODO: This implementation is not yet finished (Basket ItemMap is not mapped to BasketPojo barcodeMap). Why not do a refactoring Kata on that?
-        BasketPojo basketPojo = new BasketPojo(basket.getId(), new HashMap<>());
+        Map<String, Integer> barcodeMap = new HashMap<>();
+        for (Map.Entry<Item, Integer> entry : basket.getItemMap().entrySet()) {
+            barcodeMap.put(entry.getKey().getBarcode(), entry.getValue());
+        }
+        BasketPojo basketPojo = new BasketPojo(basket.getId(), barcodeMap);
         dao.persistBasket(basketPojo);
 
         em.getTransaction().commit();

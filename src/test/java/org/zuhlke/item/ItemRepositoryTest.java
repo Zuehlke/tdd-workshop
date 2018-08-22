@@ -13,10 +13,18 @@ public class ItemRepositoryTest {
 
     @Test
     public void getItem_itemInserted_itemFound() {
+        // Given
         ItemRepository iR = new ItemRepository();
-        iR.add("0101", "ItemName", "1.00");
+        String barcode = "0101";
+        String itemName = "ItemName";
+        String price = "1.00";
+        iR.add(barcode, itemName, price);
+        Item item = new Item(itemName, price, barcode);
 
-        Item item = new Item("ItemName", "1.00");
-        Assert.assertEquals(item, iR.getItem("0101"));
+        // When
+        Item retrievedItem = iR.getItem(barcode);
+
+        // Then
+        Assert.assertEquals(item, retrievedItem);
     }
 }

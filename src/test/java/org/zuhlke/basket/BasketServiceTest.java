@@ -68,7 +68,7 @@ public class BasketServiceTest {
 
         // Then
         assertEquals(new Integer(1), basket.getId());
-        assertEquals(new Integer(amount), basket.getItemMap().get(new Item("Wine", "6.66")));
+        assertEquals(new Integer(amount), basket.getItemMap().get(new Item("Wine", "6.66", barcode)));
     }
 
     @Test

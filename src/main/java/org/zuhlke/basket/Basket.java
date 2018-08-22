@@ -1,18 +1,25 @@
 package org.zuhlke.basket;
 
+import org.eclipse.persistence.oxm.annotations.XmlPath;
 import org.zuhlke.converter.CurrencyConverter;
 import org.zuhlke.item.Item;
+import org.zuhlke.mapping.MapAdapter;
 import org.zuhlke.promotion.Promotion;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
+@XmlRootElement
 public class Basket {
     public static final Currency SGD = Currency.getInstance("SGD");
     private Integer id;
+    @XmlPath("itemMap")
+    @XmlJavaTypeAdapter(MapAdapter.class)
     private Map<Item, Integer> itemMap = new HashMap<>();
     private CurrencyConverter converter;
 
@@ -92,7 +99,7 @@ public class Basket {
         }
     }
 
-    Map<Item, Integer> getItemMap() {
+    public Map<Item, Integer> getItemMap() {
         return itemMap;
     }
 

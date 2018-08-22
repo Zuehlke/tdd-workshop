@@ -6,10 +6,12 @@ import java.util.Objects;
 public class Item {
     private final String itemName;
     private final BigDecimal priceBigDecimal;
+    private String barcode;
 
-    public Item(String itemName, String price) {
+    public Item(String itemName, String price, String barcode) {
         this.itemName = itemName;
         this.priceBigDecimal = new BigDecimal(price);
+        this.barcode = barcode;
     }
 
     @Override
@@ -18,12 +20,13 @@ public class Item {
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
         return Objects.equals(itemName, item.itemName) &&
-                Objects.equals(priceBigDecimal, item.priceBigDecimal);
+                Objects.equals(priceBigDecimal, item.priceBigDecimal) &&
+                Objects.equals(barcode, item.barcode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemName, priceBigDecimal);
+        return Objects.hash(itemName, priceBigDecimal, barcode);
     }
 
     public String getName() {
@@ -32,5 +35,9 @@ public class Item {
 
     public BigDecimal getPriceBigDecimal() {
         return priceBigDecimal;
+    }
+
+    public String getBarcode() {
+        return barcode;
     }
 }

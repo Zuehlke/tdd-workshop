@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.zuhlke.ApplicationConfig;
+import org.zuhlke.item.Item;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -96,6 +97,29 @@ public class BasketRestTest {
         List<Basket> body = response.readEntity(new GenericType<List<Basket>>() {
         });
         assertEquals(1, body.size());
+
+        // Cleanup
+        Response delete = client.target(BASE_URL + body.get(0).getId()).request().delete();
+        assertEquals(204, delete.getStatus());
+    }
+
+
+    @Test
+    public void getBaskets_basketsWithItemsInDb_returned() {
+        // Given
+        Basket basket = new Basket();
+        basket.add(new Item("Wine", "6.66", "10101"));
+        client.target(BASE_URL).request().put(Entity.json(basket));
+
+        // When
+        Response response = client.target(BASE_URL).request().get();
+
+        // Then
+        assertEquals(200, response.getStatus());
+        List<Basket> body = response.readEntity(new GenericType<List<Basket>>() {
+        });
+        assertEquals(1, body.size());
+        assertEquals(1, body.get(0).getItemMap().size());
 
         // Cleanup
         Response delete = client.target(BASE_URL + body.get(0).getId()).request().delete();

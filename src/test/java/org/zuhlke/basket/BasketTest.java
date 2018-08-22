@@ -35,7 +35,7 @@ public class BasketTest {
         Basket b = new Basket();
 
         // When
-        b.add(new Item("Wine", "6.66"));
+        b.add(new Item("Wine", "6.66", null));
 
         // Then
         assertEquals("Wine: 6.66\nTotal: 6.66", b.getSummary(SGD));
@@ -47,11 +47,11 @@ public class BasketTest {
         Basket b = new Basket();
 
         // When
-        b.add(new Item("Rösti", "2.33"));
-        b.add(new Item("Wine", "6.66"));
+        b.add(new Item("Rösti", "2.33", null));
+        b.add(new Item("Wine", "6.66", null));
 
         // Then
-        assertEquals("Rösti: 2.33\nWine: 6.66\nTotal: 8.99", b.getSummary(SGD));
+        assertEquals("Wine: 6.66\nRösti: 2.33\nTotal: 8.99", b.getSummary(SGD));
     }
 
     @Test
@@ -60,8 +60,8 @@ public class BasketTest {
         Basket b = new Basket();
 
         // When
-        b.add(new Item("Wine", "6.66"));
-        b.add(new Item("Wine", "6.66"));
+        b.add(new Item("Wine", "6.66", null));
+        b.add(new Item("Wine", "6.66", null));
 
         // Then
         assertEquals("2 Wine: 13.32\nTotal: 13.32", b.getSummary(SGD));
@@ -71,10 +71,10 @@ public class BasketTest {
     public void remove_itemOnceInBasketRemoved_itemNoLongerOnSummary() {
         // Given
         Basket b = new Basket();
-        b.add(new Item("Wine", "6.66"));
+        b.add(new Item("Wine", "6.66", null));
 
         // When
-        b.remove(new Item("Wine", "6.66"));
+        b.remove(new Item("Wine", "6.66", null));
 
         // Then
         assertEquals("Total: 0.00", b.getSummary(SGD));
@@ -84,7 +84,7 @@ public class BasketTest {
     public void remove_itemTwiceInBasketRemoved_itemNoLongerOnSummary() {
         // Given
         Basket b = new Basket();
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         b.add(wine);
         b.add(wine);
 
@@ -101,7 +101,7 @@ public class BasketTest {
         Basket b = new Basket();
 
         // When
-        b.remove(new Item("Wine", "6.66"));
+        b.remove(new Item("Wine", "6.66", null));
 
         // Then (exception)
     }
@@ -109,7 +109,7 @@ public class BasketTest {
     @Test
     public void getSummary_promoFulfilled_promoPriceShown() {
         // Given
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         Promotion promotion = new Promotion(wine, 2, "10.00");
         Basket basket = new Basket();
         // Need to add at least two wines for the promotion to trigger
@@ -126,7 +126,7 @@ public class BasketTest {
     @Test
     public void getSummary_promoNotFulfilled_ordinaryPriceShown() {
         // Given
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         Promotion promotion = new Promotion(wine, 2, "10.00");
         Basket basket = new Basket();
         basket.add(wine);
@@ -141,8 +141,8 @@ public class BasketTest {
     @Test
     public void getSummary_promoForWrongItem_ordinaryPriceShown() {
         // Given
-        Item wine = new Item("Wine", "6.66");
-        Item roesti = new Item("Rösti", "2.33");
+        Item wine = new Item("Wine", "6.66", null);
+        Item roesti = new Item("Rösti", "2.33", null);
         Promotion promotion = new Promotion(wine, 2, "10.00");
         Basket basket = new Basket();
         basket.add(roesti);
@@ -157,7 +157,7 @@ public class BasketTest {
     @Test
     public void getSummary_promoFulfilledWithLeftoverStack_promoPriceShown() {
         // Given
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         Promotion promotion = new Promotion(wine, 2, "10.00");
         Basket basket = new Basket();
         basket.add(wine);
@@ -180,7 +180,7 @@ public class BasketTest {
                 return new BigDecimal("0.5");
             }
         };
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         Basket basket = new Basket(converter);
         basket.add(wine);
 
@@ -198,7 +198,7 @@ public class BasketTest {
         CurrencyConverter converter = mock(CurrencyConverter.class);
         when(converter.getConversionRate(SGD, usd)).thenReturn(new BigDecimal("0.5"));
 
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         Basket basket = new Basket(converter);
         basket.add(wine);
 
@@ -218,7 +218,7 @@ public class BasketTest {
         CurrencyConverter converter = spy(new CurrencyConverter());
         doReturn(new BigDecimal("0.5")).when(converter).getConversionRate(SGD, usd);
 
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         Basket basket = new Basket(converter);
         basket.add(wine);
 
@@ -238,7 +238,7 @@ public class BasketTest {
         CurrencyConverter converter = mock(CurrencyConverter.class);
         when(converter.getConversionRate(SGD, usd)).thenReturn(new BigDecimal("0.5"));
 
-        Item wine = new Item("Wine", "6.66");
+        Item wine = new Item("Wine", "6.66", null);
         Basket basket = new Basket(converter);
         basket.add(wine);
 
