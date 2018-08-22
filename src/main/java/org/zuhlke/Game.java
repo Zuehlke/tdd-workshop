@@ -105,13 +105,9 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (inPenaltyBox[currentPlayer]) {
-            if (isGettingOutOfPenaltyBox) {
-                return addPursesAndDidPlayerWin();
-            } else {
-                nextPlayer();
-                return true;
-            }
+        if (inPenaltyBox[currentPlayer] && !isGettingOutOfPenaltyBox) {
+            nextPlayer();
+            return true;
         } else {
             return addPursesAndDidPlayerWin();
         }
