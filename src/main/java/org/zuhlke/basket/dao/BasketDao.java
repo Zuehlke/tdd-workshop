@@ -1,11 +1,19 @@
 package org.zuhlke.basket.dao;
 
+import javax.persistence.EntityManager;
+
 public class BasketDao {
-    public BasketPojo getBasket(int id) {
-        throw new RuntimeException("I'm an awkward collaborator, you should not call me!");
+    private EntityManager em;
+
+    public BasketDao(EntityManager em) {
+        this.em = em;
     }
 
-    public int persistBasket(BasketPojo basketPojo) {
-        throw new RuntimeException("I'm an awkward collaborator, you should not call me!");
+    public BasketPojo getBasket(int id) {
+        return em.find(BasketPojo.class, id);
+    }
+
+    public void persistBasket(BasketPojo basketPojo) {
+        em.persist(basketPojo);
     }
 }
