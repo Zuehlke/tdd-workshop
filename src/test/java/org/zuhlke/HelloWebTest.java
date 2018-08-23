@@ -8,9 +8,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import static org.junit.Assert.assertEquals;
 
-public class HelloTest {
+public class HelloWebTest {
 
     @Test
+    // Run this test manually as it depends on a deployed application
     public void Hello() {
         String name = "Florian";
         WebDriver driver = new ChromeDriver();
