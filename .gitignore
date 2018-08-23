@@ -34,4 +34,7 @@ unitTest*.ddl
 bin/
 .classpath
 .project
+
+# Maven
+target/
 out/
