@@ -32,6 +32,8 @@ dependencies {
 
     compile 'javax.servlet:jstl:1.2'
     compile 'org.glassfish:javax.faces:2.4.0'
+
+    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.14.0'
 }
 
 tasks.withType(JavaCompile) {
